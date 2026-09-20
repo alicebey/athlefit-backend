@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: athlefit-backend
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/athlefit}
+    username: ${DATABASE_USERNAME:athlefit}
+    password: ${DATABASE_PASSWORD:athlefit}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+
+athlefit:
+  auth:
+    firebase-project-id: ${FIREBASE_PROJECT_ID:athlete-376013}
+  admin:
+    firebase-uids: ${ADMIN_FIREBASE_UIDS:}
+  geoapify:
+    api-key: ${GEOAPIFY_API_KEY:}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:*}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

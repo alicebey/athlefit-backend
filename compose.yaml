@@ -1,0 +1,21 @@
+name: athlefit
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: athlefit
+      POSTGRES_USER: athlefit
+      POSTGRES_PASSWORD: athlefit
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U athlefit -d athlefit"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - athlefit_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  athlefit_postgres_data:

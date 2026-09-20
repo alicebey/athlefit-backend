@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:athlefit;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+
+athlefit:
+  auth:
+    firebase-project-id: test-project
+  cors:
+    allowed-origins: http://localhost:*
