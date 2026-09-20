@@ -1,6 +1,10 @@
 # Athlefit Backend
 
-REST backend for the Athlefit React Native sports-venue booking app. It replaces direct Cloud Firestore access while retaining Firebase Authentication as the identity provider.
+REST backend for the [Athlefit](https://github.com/alicebey/athlefit-react-native) React Native sports-venue booking app. It replaces direct Cloud Firestore access while retaining Firebase Authentication as the identity provider.
+
+The API owns every business rule: venue catalogue and prices, slot availability, booking lifecycle, manual payment verification and venue-owner permissions. Firebase is used for identity only, and no booking can ever double-book a court — PostgreSQL itself enforces that.
+
+**Mobile app repository:** [alicebey/athlefit-react-native](https://github.com/alicebey/athlefit-react-native)
 
 ## Stack
 
@@ -186,6 +190,14 @@ Legacy Firestore documents are not imported automatically.
 
 The suite checks application startup, server-side price calculation, court availability, configured court creation, Geoapify response mapping, schedule parsing, and sport suggestions. A future production hardening step should add Testcontainers coverage for the PostgreSQL exclusion constraint and authenticated controller tests.
 
+## Design Notes
+
+- **Server authority.** Price, court assignment, opening-hour validation, ownership and cancellation windows are decided here; the app only displays them.
+- **Two layers against double booking.** The service picks a free court, and a PostgreSQL GiST exclusion constraint rejects any overlapping active booking on the same court, even under a race.
+- **Payments without a gateway.** Bookings hold their court for 30 minutes; the customer submits transfer details and the venue owner confirms or rejects. A scheduled job expires unpaid bookings.
+- **Provider data stays a snapshot.** Geoapify is called only during admin onboarding; normal reads and bookings never depend on it.
+- **Migrations are the schema.** JPA runs with `ddl-auto: validate`; every change is a new Flyway migration.
+
 ## Related Project
 
-The React Native app is at `/Users/eki/React Native/athlefit-main`. Its `AGENTS.md` documents the mobile compatibility mapping and local emulator URL.
+The React Native app lives at [alicebey/athlefit-react-native](https://github.com/alicebey/athlefit-react-native). Its `AGENTS.md` documents the mobile mapping and local emulator URL.
